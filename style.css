@@ -1,0 +1,13 @@
+#main {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.form_row {
+    margin: 5px;
+}
+
+.field_label {
+    display: inline-block;
+    width: 120px;
+}
