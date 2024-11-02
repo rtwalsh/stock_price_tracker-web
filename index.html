@@ -6,6 +6,43 @@
         <title>Stock Price Tracker</title>
     </head>
     <body>
-
+        <div id="main">
+            <section id="input_section">
+                <h1>Stock Price Tracker</h1>
+                <p>
+                    Enter the stock symbol, date range, and pricing interval to
+                    retrieve the stock's historical pricing information.
+                </p>
+                <form id="input_form">
+                    <div class="form_row">
+                        <label class="field_label" for="stock_symbol_field">Stock Symbol:</label>
+                        <input type="text" id="stock_symbol_field" name="stock_symbol_field">
+                    </div>
+                    <div class="form_row">
+                        <label class="field_label" for="from_date_field">From Date:</label>
+                        <input type="date" id="from_date_field" name="from_date_field">
+                    </div>
+                    <div class="form_row">
+                        <label class="field_label" for="to_date_field">To Date:</label>
+                        <input type="date" id="to_date_field" name="to_date_field">
+                    </div>
+                    <div class="form_row">
+                        <label class="field_label" for="pricing_interval">Interval</label>
+                        <select id="pricing_interval" name="pricing_interval">
+                            <option value="half_hour">30 minutes</option>
+                            <option value="hour">1 hour</option>
+                            <option value="day" selected>1 day</option>
+                            <option value="week">1 week</option>
+                            <option value="month">1 month</option>
+                            <option value="quarter">1 quarter</option>
+                            <option value="year">1 year</option>
+                        </select>
+                    </div>
+                    <div class="form_row">
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </section>
+        </div>
     </body>
 </html>
