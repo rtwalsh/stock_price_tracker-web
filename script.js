@@ -22,3 +22,7 @@ function formatDate(date) {
     let t = result.indexOf("T");
     return result.substring(0, t);
 }
+
+function setSubmitButtonState(event) {
+    document.getElementById("submit_button").disabled = !event.currentTarget.value.length;
+}

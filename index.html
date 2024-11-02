@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width;initial-scale=1">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Stock Price Tracker</title>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -17,7 +17,11 @@
                 <form id="input_form">
                     <div class="form_row">
                         <label class="field_label" for="stock_symbol_field">Stock Symbol:</label>
-                        <input type="text" id="stock_symbol_field" name="stock_symbol_field">
+                        <input 
+                            type="text" 
+                            id="stock_symbol_field" 
+                            name="stock_symbol_field" 
+                            oninput="setSubmitButtonState(event)">
                     </div>
                     <div class="form_row">
                         <label class="field_label" for="from_date_field">From Date:</label>
@@ -41,7 +45,7 @@
                     </div>
                     <div class="form_row">
                         <span class="field_label"><!-- This is a placeholder --></span>
-                        <input type="submit" value="Submit">
+                        <input type="submit" id="submit_button" value="Submit" disabled>
                     </div>
                 </form>
             </section>
