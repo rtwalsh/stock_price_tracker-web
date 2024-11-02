@@ -26,3 +26,8 @@ function formatDate(date) {
 function setSubmitButtonState(event) {
     document.getElementById("submit_button").disabled = !event.currentTarget.value.length;
 }
+
+function submitForm(event) {
+    event.preventDefault();
+    console.log("Form submitted");
+}
