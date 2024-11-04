@@ -49,6 +49,19 @@
                     </div>
                 </form>
             </section>
+            <section id="error_section" hidden></section>
+            <section id="results_section" hidden>
+                <h2>Information for <span id="stock_symbol_span"></span></h2>
+                <h3>From <span id="from_date_span"></span> to <span id="to_date_span"></span></h3>
+                <table>
+                    <tr><th>Starting Price</th><td id="starting_price_cell"></td></tr>
+                    <tr><th>Ending Price</th><td id="ending_price_cell"></td></tr>
+                    <tr><th>Average Low Price</th><td id="average_low_cell"></td></tr>
+                    <tr><th>Average High Price</th><td id="average_high_cell"></td></tr>
+                    <tr><th>Average Open Price</th><td id="average_open_cell"></td></tr>
+                    <tr><th>Average Close Price</th><td id="average_close_cell"></td></tr>
+                </table>
+            </section>
         </div>
         <script type="text/javascript" src="script.js"></script>
     </body>
