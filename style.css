@@ -28,3 +28,7 @@ th {
     text-align: left;
     width: 30%;
 }
+
+#results_graph {
+    border: 1px solid black;
+}
