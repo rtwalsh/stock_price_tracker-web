@@ -11,3 +11,20 @@
     display: inline-block;
     width: 120px;
 }
+
+#error_section {
+    border: 1px solid red;
+    border-radius: 3px;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: pink;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    text-align: left;
+    width: 30%;
+}
