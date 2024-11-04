@@ -55,7 +55,7 @@ let graph = {
         this.context.stroke();
 
         if (this.domain && this.lowerLimit && this.upperLimit) {
-            this.fillStyle = "black";
+            this.context.fillStyle = "black";
             this.context.fillText(this.lowerLimit, 5, this.yFromRangeY(this.lowerLimit));
             this.context.fillText(this.upperLimit, 5, this.yFromRangeY(this.upperLimit));
         }
@@ -100,6 +100,9 @@ function setSubmitButtonState(event) {
 function submitForm(event) {
     event.preventDefault();
     console.log("Form submitted");
+
+    document.getElementById("error_section").hidden = true;
+    document.getElementById("results_section").hidden = true;
 
     let queryParameters = getQueryParameters();
     let url = constructUrl(queryParameters);
@@ -158,23 +161,31 @@ function processResponse(response) {
     let data = JSON.parse(response);
     console.log(data);
 
-    document.getElementById("stock_symbol_span").textContent = data.ticker;
-    document.getElementById("from_date_span").textContent = new Date(data.results[0].t).toDateString();
-    document.getElementById("to_date_span").textContent = new Date(data.results[data.resultsCount - 1].t).toDateString();
-
-    let aggregates = analyze(data);
-    document.getElementById("starting_price_cell").textContent = data.results[0].o;
-    document.getElementById("ending_price_cell").textContent = data.results[data.resultsCount - 1].c;
-    document.getElementById("average_low_cell").textContent = aggregates.avgLow;
-    document.getElementById("average_high_cell").textContent = aggregates.avgHigh;
-    document.getElementById("average_open_cell").textContent = aggregates.avgOpen;
-    document.getElementById("average_close_cell").textContent = aggregates.avgClose;
-    document.getElementById("min_low_cell").textContent = aggregates.minLow;
-    document.getElementById("max_high_cell").textContent = aggregates.maxHigh;
-
-    drawGraph(aggregates, data);
-
-    document.getElementById("results_section").hidden = false;
+    if (data.resultsCount > 0) {
+        document.getElementById("stock_symbol_span").textContent = data.ticker;
+        document.getElementById("from_date_span").textContent = new Date(data.results[0].t).toDateString();
+        document.getElementById("to_date_span").textContent = new Date(data.results[data.resultsCount - 1].t).toDateString();
+    
+        let aggregates = analyze(data);
+        document.getElementById("starting_price_cell").textContent = data.results[0].o;
+        document.getElementById("ending_price_cell").textContent = data.results[data.resultsCount - 1].c;
+        document.getElementById("average_low_cell").textContent = aggregates.avgLow;
+        document.getElementById("average_high_cell").textContent = aggregates.avgHigh;
+        document.getElementById("average_open_cell").textContent = aggregates.avgOpen;
+        document.getElementById("average_close_cell").textContent = aggregates.avgClose;
+        document.getElementById("min_low_cell").textContent = aggregates.minLow;
+        document.getElementById("max_high_cell").textContent = aggregates.maxHigh;
+    
+        drawGraph(aggregates, data);
+    
+        document.getElementById("results_section").hidden = false;
+    } else {
+        let errMsg = "No data returned for: " + data.ticker;
+        console.warn(errMsg);
+        let element = document.getElementById("error_section");
+        element.textContent = errMsg;
+        element.hidden = false;
+    }
 }
 
 function analyze(data) {
