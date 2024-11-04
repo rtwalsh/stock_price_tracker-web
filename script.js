@@ -63,7 +63,7 @@ let graph = {
     plot: function(label, color, dataPoints, property) {
         // Add an entry to the legend
         this.context.fillStyle = color;
-        this.context.fillText(label, this.xFromDomainX(0.25), this.yMargin + 15 * this.labelCount++);
+        this.context.fillText(label, this.xMargin + 10, this.yMargin + 15 * this.labelCount++);
 
         // Plot the points in the data set
         this.context.beginPath();
