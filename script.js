@@ -9,6 +9,54 @@
 const API_KEY = "taNeJ_Xfh4Fo_nR2VI5OvX0R_J3w3Rd6";
 const URL_TEMPLATE = "https://api.polygon.io/v2/aggs/ticker/{symbol}/range/{interval}/{unit}/{from_date}/{to_date}?limit={limit}&apiKey={API_KEY}";
 const QUERY_LIMIT = 5000;
+const RANGE_BUFFER = 10;
+const GRAPH_MARGIN = 25;
+
+/*
+ *  GRAPH OBJECT DEFINITION
+ */
+let canvas = document.getElementById("results_graph");
+let graph = {
+    height: canvas.height,
+    width: canvas.width,
+    xMargin: GRAPH_MARGIN,
+    yMargin: GRAPH_MARGIN,
+    context: canvas.getContext("2d"),
+    erase: function() {
+        this.context.clearRect(0, 0, this.width, this.height);
+        this.context.font = "10px arial";
+        this.context.textBaseline = "middle";
+        this.labelCount = 0;
+    },
+    setDomain: function(domain) {
+        this.domain = domain;
+    },
+    setRange: function(lowerLimit, upperLimit) {
+        this.lowerLimit = lowerLimit;
+        this.upperLimit = upperLimit;
+    },
+    yFromRangeY: function(rangeY) {
+        let yAxisHeight = this.height - 2 * this.yMargin;
+        return this.height - this.yMargin - (yAxisHeight * this.scaleToRange(rangeY));
+    },
+    scaleToRange: function(rangeY) {
+        return (rangeY - this.lowerLimit) / (this.upperLimit - this.lowerLimit);
+    },
+    drawAxes: function() {
+        this.context.beginPath();
+        this.context.strokeStyle = "black";
+        this.context.moveTo(this.xMargin, this.yMargin);
+        this.context.lineTo(this.xMargin, this.height - this.yMargin);
+        this.context.lineTo(this.width - this.xMargin, this.height - this.yMargin);
+        this.context.stroke();
+
+        if (this.domain && this.lowerLimit && this.upperLimit) {
+            this.fillStyle = "black";
+            this.context.fillText(this.lowerLimit, 5, this.yFromRangeY(this.lowerLimit));
+            this.context.fillText(this.upperLimit, 5, this.yFromRangeY(this.upperLimit));
+        }
+    }
+};
 
 function initialize() {
     let today = new Date();
@@ -106,6 +154,8 @@ function processResponse(response) {
     document.getElementById("min_low_cell").textContent = aggregates.minLow;
     document.getElementById("max_high_cell").textContent = aggregates.maxHigh;
 
+    drawGraph(aggregates, data);
+
     document.getElementById("results_section").hidden = false;
 }
 
@@ -141,4 +191,11 @@ function analyze(data) {
         minLow: minLow,
         maxHigh: maxHigh
     };
+}
+
+function drawGraph(aggregates, data) {
+    graph.erase();
+    graph.setDomain(data.resultsCount);
+    graph.setRange(Math.floor(aggregates.minLow) - RANGE_BUFFER, Math.ceil(aggregates.maxHigh) + RANGE_BUFFER);
+    graph.drawAxes();
 }
