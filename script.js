@@ -42,6 +42,10 @@ let graph = {
     scaleToRange: function(rangeY) {
         return (rangeY - this.lowerLimit) / (this.upperLimit - this.lowerLimit);
     },
+    xFromDomainX: function(domainX) {
+        let xAxisLength = this.width - 2 * this.xMargin;
+        return this.xMargin + (xAxisLength * domainX / this.domain);
+    },
     drawAxes: function() {
         this.context.beginPath();
         this.context.strokeStyle = "black";
@@ -55,6 +59,20 @@ let graph = {
             this.context.fillText(this.lowerLimit, 5, this.yFromRangeY(this.lowerLimit));
             this.context.fillText(this.upperLimit, 5, this.yFromRangeY(this.upperLimit));
         }
+    },
+    plot: function(label, color, dataPoints, property) {
+        // Add an entry to the legend
+        this.context.fillStyle = color;
+        this.context.fillText(label, this.xFromDomainX(0.25), this.yMargin + 15 * this.labelCount++);
+
+        // Plot the points in the data set
+        this.context.beginPath();
+        this.context.strokeStyle = color;
+        this.context.moveTo(this.xFromDomainX(0), this.yFromRangeY(dataPoints[0][property]));
+        for (let x = 1; x < this.domain; ++x) {
+            this.context.lineTo(this.xFromDomainX(x), this.yFromRangeY(dataPoints[x][property]));
+        }
+        this.context.stroke();
     }
 };
 
@@ -198,4 +216,8 @@ function drawGraph(aggregates, data) {
     graph.setDomain(data.resultsCount);
     graph.setRange(Math.floor(aggregates.minLow) - RANGE_BUFFER, Math.ceil(aggregates.maxHigh) + RANGE_BUFFER);
     graph.drawAxes();
+    graph.plot("High", "purple", data.results, "h");
+    graph.plot("Low", "blue", data.results, "l"); // this is lowercase 'L'
+    graph.plot("Open", "green", data.results, "o"); // this is lowercase 'O'
+    graph.plot("Close", "red", data.results, "c");
 }
