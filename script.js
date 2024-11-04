@@ -147,11 +147,7 @@ function sendRequest(url) {
             console.log("Received: " + this.responseText);
             processResponse(this.responseText);
         } else {
-            let errMsg = "Request failed.  Response status code: " + this.status;
-            console.warn(errMsg);
-            let element = document.getElementById("error_section");
-            element.textContent = errMsg;
-            element.hidden = false;
+            displayError("Request failed.  Response status code: " + this.status);
         }
     };
     request.send();
@@ -180,11 +176,7 @@ function processResponse(response) {
     
         document.getElementById("results_section").hidden = false;
     } else {
-        let errMsg = "No data returned for: " + data.ticker;
-        console.warn(errMsg);
-        let element = document.getElementById("error_section");
-        element.textContent = errMsg;
-        element.hidden = false;
+        displayError("No data returned for: " + data.ticker);
     }
 }
 
@@ -231,4 +223,11 @@ function drawGraph(aggregates, data) {
     graph.plot("Low", "blue", data.results, "l"); // this is lowercase 'L'
     graph.plot("Open", "green", data.results, "o"); // this is lowercase 'O'
     graph.plot("Close", "red", data.results, "c");
+}
+
+function displayError(errMsg) {
+    console.warn(errMsg);
+    let element = document.getElementById("error_section");
+    element.textContent = errMsg;
+    element.hidden = false;
 }
