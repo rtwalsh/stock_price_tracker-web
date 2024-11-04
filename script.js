@@ -76,10 +76,25 @@ function sendRequest(url) {
     request.onload = function() {
         if ((this.status >= 200) && (this.status < 400)) {
             console.log("Received: " + this.responseText);
+            processResponse(this.responseText);
         } else {
             let errMsg = "Request failed.  Response status code: " + this.status;
             console.warn(errMsg);
+            let element = document.getElementById("error_section");
+            element.textContent = errMsg;
+            element.hidden = false;
         }
     };
     request.send();
+}
+
+function processResponse(response) {
+    let data = JSON.parse(response);
+    console.log(data);
+
+    document.getElementById("stock_symbol_span").textContent = data.ticker;
+    document.getElementById("from_date_span").textContent = new Date(data.results[0].t).toDateString();
+    document.getElementById("to_date_span").textContent = new Date(data.results[data.resultsCount - 1].t).toDateString();
+
+    document.getElementById("results_section").hidden = false;
 }
