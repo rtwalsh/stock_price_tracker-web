@@ -96,5 +96,49 @@ function processResponse(response) {
     document.getElementById("from_date_span").textContent = new Date(data.results[0].t).toDateString();
     document.getElementById("to_date_span").textContent = new Date(data.results[data.resultsCount - 1].t).toDateString();
 
+    let aggregates = analyze(data);
+    document.getElementById("starting_price_cell").textContent = data.results[0].o;
+    document.getElementById("ending_price_cell").textContent = data.results[data.resultsCount - 1].c;
+    document.getElementById("average_low_cell").textContent = aggregates.avgLow;
+    document.getElementById("average_high_cell").textContent = aggregates.avgHigh;
+    document.getElementById("average_open_cell").textContent = aggregates.avgOpen;
+    document.getElementById("average_close_cell").textContent = aggregates.avgClose;
+    document.getElementById("min_low_cell").textContent = aggregates.minLow;
+    document.getElementById("max_high_cell").textContent = aggregates.maxHigh;
+
     document.getElementById("results_section").hidden = false;
+}
+
+function analyze(data) {
+    let lowSum = 0;
+    let highSum = 0;
+    let openSum = 0;
+    let closeSum = 0;
+    let minLow = -1;
+    let maxHigh = 0;
+
+    for (let x = 0; x < data.resultsCount; ++x) {
+        let dataPoint = data.results[x];
+        lowSum += dataPoint.l;  // lowercase 'L', not '1'
+        highSum += dataPoint.h;
+        openSum += dataPoint.o; // lowercase 'O', not '0'
+        closeSum += dataPoint.c;
+
+        if ( (minLow < 0) || (dataPoint.l < minLow) ) {
+            minLow = dataPoint.l;
+        }
+
+        if (dataPoint.h > maxHigh) {
+            maxHigh = dataPoint.h;
+        }
+    }
+
+    return {
+        avgLow: lowSum / data.resultsCount,
+        avgHigh: highSum / data.resultsCount,
+        avgOpen: openSum / data.resultsCount,
+        avgClose: closeSum / data.resultsCount,
+        minLow: minLow,
+        maxHigh: maxHigh
+    };
 }
